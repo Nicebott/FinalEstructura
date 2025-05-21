@@ -1,213 +1,111 @@
-### Sakila Database
-
-## Descripción
-
-Sakila Database es una aplicación Java que proporciona una interfaz orientada a objetos para gestionar la base de datos Sakila, un esquema que simula un sistema de alquiler de películas. 
-Esta aplicación implementa una arquitectura en capas con un diseño orientado a objetos, facilitando operaciones CRUD (Crear, Leer) sobre las diferentes entidades del sistema.
-
-## Características principales
-
-- **Gestión completa de entidades**: Administración de actores, películas, clientes, inventario y ciudades
-- **Consultas personalizadas**: Ejecución de consultas complejas como "Top películas más alquiladas" o "Ingresos por categoría"
-- **Generación de reportes**: Exportación de resultados a formatos como CSV
-- **Interfaz por consola**: Menú intuitivo para interactuar con todas las funcionalidades
-- **Caché en memoria**: Optimización de rendimiento mediante listas en memoria
-- **Validación de datos**: Cada entidad implementa su propio método de validación
-- **Manejo de transacciones**: Soporte para operaciones transaccionales
-- **Registro de actividades**: Sistema de logging para seguimiento y depuración
+# Sakila Database
 
 
-## Tecnologías utilizadas
+Una aplicación Java para gestionar la base de datos Sakila de MySQL, que proporciona una interfaz de consola para administrar actores, clientes, películas, inventario y ciudades, así como ejecutar consultas personalizadas y generar reportes.
 
-- Java 8+
-- JDBC para conexión a base de datos
-- MySQL (Base de datos Sakila)
-- Programación Orientada a Objetos
-- Patrón DAO (Data Access Object)
+##  Tabla de Contenidos
 
+- [Requisitos]
+- [Instalación]
+- [Estructura del Proyecto]
+- [Funcionalidades]
+- [Uso]
+- [Tecnologías]
 
-## Estructura del proyecto
+##  Requisitos
 
-### Paquetes principales
-
-com.sakila
-├── controllers     # Controladores para cada entidad
-├── data           # Interfaces y clases para acceso a datos
-├── models         # Clases de modelo/entidades
-└── utils          # Clases de utilidad (conexión, logging, reportes)
-
-### Diagrama de clases simplificado
-Entity (abstract)
-  ├── Actor
-  ├── Cliente
-  ├── Pelicula
-  ├── Inventario
-  ├── City
-  ├── Country
-  ├── Address
-  ├── Store
-  ├── Staff
-  └── Language
-
-iDatapost<T> (interface)
-  ├── ActorControlador
-  ├── ClienteControlador
-  ├── PeliculaControlador
-  ├── InventarioControlador
-  ├── CityControlador
-  └── CountryControlador
-
-Utilities
-  ├── DatabaseConnection
-  ├── Logger
-  └── ReportGenerator
-
-## Requisitos previos
-
-- JDK 8 o superior
-- MySQL Server 5.7 o superior
-- Base de datos Sakila instalada
+- Java 11 o superior
+- MySQL 8.0 o superior
+- Base de datos Sakila instalada en MySQL
 - Conector JDBC para MySQL
 
+##  Instalación
 
-## Instalación
+1. Clona este repositorio:
+ 
+   git clone https://github.com/Nicebott/FinalEstructura
 
-### 1. Clonar el repositorio
+2. Configura la conexión a la base de datos en `com/sakila/utils/DatabaseConnection.java`:
+   
+   private static final String URL = "jdbc:mysql://localhost:3306/sakila";
+   private static final String USER = "tu usuario";
+   private static final String PASSWORD = "tu contraseña";
+   
 
-git clone https://github.com/Nicebott/FinalEstructura
+3. Compila el proyecto:
+   javac -d bin -cp lib/mysql-connector-java-8.0.28.jar Main.java com/sakila/**/*.java
+  
 
+4. Ejecuta la aplicación:
 
-### 2. Configurar la conexión a la base de datos
+   java -cp bin:lib/mysql-connector-java-8.0.28.jar Main
+  
 
-Edita el archivo com.sakila.utils.DatabaseConnection.java para configurar los parámetros de conexión:
-
-java
-private static final String URL = "jdbc:mysql://localhost:3306/sakila";
-private static final String USER = "tu_usuario";
-private static final String PASSWORD = "tu_contraseña";
-
-### 3. Compilar el proyecto
-
-# Compilación manual
-javac -d bin src/com/sakila/**/*.java
-
-### 4. Ejecutar la aplicación
-
-# Ejecución manual
-java -cp bin:lib/* Main
+##  Estructura del Proyecto
 
 
-## Guía de uso
+sakila-database/
+├── Main.java                           # Punto de entrada de la aplicación
+├── com/
+│   └── sakila/
+│       ├── controllers/                # Controladores para las entidades
+│       │   ├── ActorControlador.java
+│       │   ├── CityControlador.java
+│       │   ├── ClienteControlador.java
+│       │   ├── CountryControlador.java
+│       │   ├── InventarioControlador.java
+│       │   └── PeliculaControlador.java
+│       ├── data/                       # Capa de acceso a datos
+│       │   ├── ContextoBaseDatos.java
+│       │   ├── DataContext.java
+│       │   └── iDatapost.java
+│       ├── models/                     # Modelos de datos
+│       │   ├── Actor.java
+│       │   ├── Address.java
+│       │   ├── City.java
+│       │   ├── Cliente.java
+│       │   ├── Country.java
+│       │   ├── Entity.java
+│       │   ├── Inventario.java
+│       │   ├── Language.java
+│       │   ├── Pelicula.java
+│       │   ├── Staff.java
+│       │   └── Store.java
+│       └── utils/                      # Utilidades
+│           ├── DatabaseConnection.java
+│           ├── Logger.java
+│           ├── ReportGenerator.java
+│           └── Validator.java
+├── lib/                                # Bibliotecas externas
+│   └── mysql-connector-java-8.0.28.jar
+└── config.properties                   # Archivo de configuración
 
-### Menú principal
+##  Funcionalidades
 
-Al iniciar la aplicación, se muestra un menú con las siguientes opciones:
+### Gestión de Entidades
+- **Actores**: Listar, buscar, agregar, actualizar y eliminar actores.
+- **Clientes**: Listar, buscar, agregar, actualizar y eliminar clientes, ver alquileres.
+- **Películas**: Listar, buscar, agregar, actualizar y eliminar películas, ver actores.
+- **Inventario**: Listar, buscar, agregar y eliminar inventario.
+- **Ciudades**: Listar, buscar, agregar, actualizar y eliminar ciudades, listar por país.
 
-1. Gestionar Actores
-2. Gestionar Clientes
-3. Gestionar Películas
-4. Gestionar Inventario
-5. Ejecutar consultas personalizadas
-6. Generar reportes
-7. Gestionar Ciudades
-8. Salir
-
-
-### Ejemplos de consultas personalizadas
-
-La aplicación permite ejecutar consultas predefinidas como:
-
+### Consultas Personalizadas
 - Top 5 películas más alquiladas
 - Top 5 clientes con más alquileres
 - Ingresos por categoría
+- Películas por actor
+- Clientes por país
 
+### Generación de Reportes
+- Películas por categoría
+- Clientes por país
+- Ingresos por mes
+- Inventario por tienda
+- Exportación a CSV y JSON
 
-### Generación de reportes
+##  Uso
 
-Los reportes se generan en formato CSV y se guardan en el directorio ./reports/ con un timestamp para identificarlos fácilmente.
-
-## Arquitectura
-
-### Capa de Modelo
-
-La aplicación utiliza una jerarquía de clases basada en la clase abstracta (Entity), de la cual heredan todas las entidades del sistema. Cada entidad implementa el método `validar()` para garantizar la integridad de los datos.
-
-### Capa de Controladores
-
-Cada entidad tiene su controlador correspondiente que implementa la interfaz `iDatapost<T>`, estableciendo un contrato uniforme para las operaciones CRUD. Los controladores mantienen listas de entidades en memoria para optimizar el rendimiento.
-
-### Capa de Utilidades
-
-- `DatabaseConnection`: Gestiona la conexión a la base de datos
-- `Logger`: Proporciona funcionalidad de registro
-- `ReportGenerator`: Genera reportes a partir de consultas SQL
-
-
-## Ejemplos de código
-
-### Obtener un actor por ID
-
-java
-ActorControlador controlador = new ActorControlador(conexion);
-Actor actor = controlador.get(1);
-System.out.println(actor.getNombrePrimer() + " " + actor.getApellido());
-
-
-### Crear un nuevo cliente
-
-java
-Cliente cliente = new Cliente();
-cliente.setPrimerNombre("Juan");
-cliente.setApellido("Pérez");
-cliente.setCorreoElectronico("juan.perez@example.com");
-cliente.setTienda(tienda);
-cliente.setDireccion(direccion);
-
-ClienteControlador controlador = new ClienteControlador(conexion);
-boolean resultado = controlador.post(cliente);
-
-
-### Ejecutar una consulta personalizada
-
-java
-String sql = "SELECT f.film_id, f.title, COUNT(r.rental_id) AS total_rentals " +
-             "FROM film f " +
-             "JOIN inventory i ON f.film_id = i.film_id " +
-             "JOIN rental r ON i.inventory_id = r.inventory_id " +
-             "GROUP BY f.film_id " +
-             "ORDER BY total_rentals DESC " +
-             "LIMIT 5";
-
-try (Statement stmt = conexion.createStatement();
-     ResultSet rs = stmt.executeQuery(sql)) {
-    while (rs.next()) {
-        System.out.println(rs.getString("title") + ": " + 
-                           rs.getInt("total_rentals") + " alquileres");
-    }
-}
-
-
-## Patrones de diseño implementados
-
-### Patrón DAO (Data Access Object)
-
-Los controladores implementan el patrón DAO a través de la interfaz `iDatapost<T>`, proporcionando una capa de abstracción para las operaciones de base de datos.
-
-### Patrón Repository
-
-Cada controlador actúa como un repositorio para su entidad correspondiente, manteniendo una colección en memoria y sincronizándola con la base de datos.
-
-### Patrón Template Method
-
-La clase abstracta `Entity` define la estructura común y comportamientos que deben implementar todas las entidades.
-
-## Autor
-
-Nicolas Zierow Fermin
-
-## Capturas de pantalla
-
-### Menú principal
+La aplicación proporciona una interfaz de consola con un menú principal que permite acceder a las diferentes funcionalidades:
 
 ===== SAKILA DATABASE =====
 1. Gestionar Actores
@@ -218,29 +116,30 @@ Nicolas Zierow Fermin
 6. Generar reportes
 7. Gestionar Ciudades
 0. Salir
-Seleccione una opción:
 
-### Lista de actores
+Cada opción lleva a un submenú con operaciones específicas para cada entidad o funcionalidad.
 
+### Ejemplo: Listar Actores
 
-  Lista de actores:
-1 - PENELOPE GUINESS
-2 - NICK WAHLBERG
-3 - ED CHASE
-4 - JENNIFER DAVIS
-5 - JOHNNY LOLLOBRIGIDA
-6 - BETTE NICHOLSON
-7 - GRACE MOSTEL
-8 - MATTHEW JOHANSSON
-9 - JOE SWANK
-10 - CHRISTIAN GABLE
+1. Selecciona la opción 1 en el menú principal
+2. Selecciona la opción 1 en el submenú de Gestión de Actores
+3. Se mostrará una lista de todos los actores en la base de datos
 
-### Consulta personalizada: Top películas
+### Ejemplo: Generar un Reporte
 
+1. Selecciona la opción 6 en el menú principal
+2. Selecciona el tipo de reporte que deseas generar
+3. Visualiza el reporte en la consola
+4. Opcionalmente, exporta el reporte a CSV
 
-  Top 5 películas más alquiladas:
-103 - BUCKET BROTHERHOOD - 34 alquileres
-738 - ROCKETEER MOTHER - 33 alquileres
-382 - GRIT CLOCKWORK - 32 alquileres
-730 - RIDGEMONT SUBMARINE - 32 alquileres
-331 - FORWARD TEMPLE - 32 alquileres
+##  Tecnologías
+
+- **Java**: Lenguaje de programación principal
+- **MySQL**: Sistema de gestión de base de datos
+- **JDBC**: API para conectar Java con MySQL
+- **Patrón MVC**: Arquitectura del proyecto (Modelo-Vista-Controlador)
+- **Patrón DAO**: Para el acceso a datos (Data Access Object)
+
+---
+
+Desarrollado por [Nicolas Zierow Fermin]
